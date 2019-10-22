@@ -3,14 +3,14 @@
 //#include "..\driverlib\MSP430F5xx_6xx\flashctl.h"
 /*
 ********************************************************************************
-*                              	Ê¹ï¿½ï¿½Ëµï¿½ï¿½
-*                           È¡ï¿½ï¿½13ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Â¼Ò»ï¿½ï¿½
-*                           ×¢ï¿½ï¿½13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼Ò»ï¿½ï¿½
+*                              	Ê¹ÓÃËµÃ÷
+*                           È¡Ïû13ÐÐ×¢ÊÍÉÕÂ¼Ò»´Î
+*                           ×¢ÊÍ13ÐÐÔÙÉÕÂ¼Ò»´Î
 *
 *
 ********************************************************************************
 */
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ð£ï¿½È»ï¿½ï¿½ï¿½ï¿½×¢ï¿½Íµï¿½ï¿½Ù´ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+//´ò¿ªÏÂÃæ×¢ÊÍÉÕÂ¼ÔËÐÐ£¬È»ºóÔÙ×¢ÊÍµôÔÙ´ÎÉÕÂ¼ÔËÐÐÒ»´Î
 //#define 	Lead 	1
 
 	unsigned char a[20];
@@ -18,7 +18,7 @@
 
 #define   softReset()            PMMCTL0 = PMMPW + PMMSWPOR + (PMMCTL0 & 0x0003)
 
-#define   RESETVECTORADDR_APP    0xFC34       //Ó¦ï¿½Ã³ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+#define   RESETVECTORADDR_APP    0xFC34       //Ó¦ÓÃ³ÌÐò¸´Î»ÏòÁ¿µØÖ·
 #define   SectorSize         	 512
 #define   infor_BootAddr         0x1800
 
@@ -38,11 +38,10 @@ void Application(void);
 void Update(void);
 /*
 // C prototype : void HexToStr(BYTE *pbDest, BYTE *pbSrc, int nLen)
-// parameter(s): [OUT] pbDest - ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
-//	[IN] pbSrc - ï¿½ï¿½ï¿½ï¿½16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
-//	[IN] nLen - 16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½
-// return value:
-// remarks : ï¿½ï¿½16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½
+// parameter(s): [OUT] pbDest - ×ª»»ºóµÄString buffer
+//	[IN] pbSrc - Ä¿±êbuffer
+//	[IN] nLen - 16½øÖÆÊý×é
+// return value:	NULL
 */
 void HexToStr( char *pbDest,  char *pbSrc, int nLen)
 {
@@ -60,10 +59,10 @@ void HexToStr( char *pbDest,  char *pbSrc, int nLen)
 	pbDest[nLen*2] = '\0';
 }
 /*******************************************************************************
-*ï¿½Ä¼ï¿½ï¿½ï¿½     : main.c
-*ï¿½ï¿½ï¿½ï¿½        : bootloader,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-*ï¿½ï¿½ï¿½ï¿½        ï¿½ï¿½ï¿½ï¿½Î°Òµ
-*ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ : 2018.6.19
+*ÎÄ¼þÃû     : main.c
+*×÷ÓÃ        : bootloader,Òýµ¼³ÌÐò
+*×÷Õß        £ºÍõÎ°Òµ
+*´´½¨Ê±¼ä : 2018.6.19
 *******************************************************************************/
 void main(void)
 {
@@ -73,10 +72,10 @@ void main(void)
 	uint8_t Flash_temp;
 	// uint8_t Data_temp[2];
 //	uint8_t RecTemp=0,RxTemp;
-	uint8_t Tmp[9];//flashï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½
+	uint8_t Tmp[9];			//flash²Ù×÷ÖÐ¼ä±äÁ¿
 	CloseWatchDog();
 	InitClock();
-	InitUsart2(115200);       //Debugï¿½ï¿½ï¿½ï¿½
+	InitUsart2(115200);       //Debug´®¿Ú
 	Init_bootGPIO();
 	Init_SPI2();
 	/***********Test SPI flash*******************/
@@ -116,13 +115,13 @@ void main(void)
 //		Print_Str("Spi_flash Verify Failure!\r\n");
 //	}
 	/******************************/
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//¡¾³ö³§¸´Î»Òýµ¼²ÎÊý¡¿
 #ifdef Lead
 	loop:
 		delay_ms(10);
 		Tmp[0] = 0xFF;
 		Tmp[1] = 0xFF;
-		FlashRsvWrite(Tmp, 2, infor_BootAddr, 0);//ï¿½ï¿½Ò»ï¿½ï¿½OldVersionÐ´ï¿½ï¿½0xFF
+		FlashRsvWrite(Tmp, 2, infor_BootAddr, 0);//µÚÒ»´ÎOldVersionÐ´Èë0xFF
 		delay_ms(10);
 		if(infoFLASH_read(0, infor_BootAddr) == 0xFF && infoFLASH_read(1, infor_BootAddr) == 0xFF)
 			delay_ms(100);
@@ -131,16 +130,16 @@ void main(void)
 
 		loop2:
 			delay_ms(10);
-			Tmp[0] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½
-			Tmp[1] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½
-			Tmp[2] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½
-			Tmp[3] = 0xFF;//ï¿½è±¸ï¿½ï¿½Å¸ß°ï¿½Î»
-			Tmp[4] = 0xFF;//ï¿½è±¸ï¿½ï¿½ÅµÍ°ï¿½Î»
-			Tmp[5] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ß°ï¿½Î»
-			Tmp[6] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅµÍ°ï¿½Î»
-			Tmp[7] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ß°ï¿½Î»
-			Tmp[8] = 0xFF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅµÍ°ï¿½Î»
-			FlashRsvWrite(Tmp, 9, infor_ChargeAddr, 0);//ï¿½ï¿½ï¿½Õ¶ï¿½ï¿½ï¿½Ï¢Ð´ï¿½ï¿½FLASH
+			Tmp[0] = 0xFF;//³ö³§ÈÕÆÚ_Äê
+			Tmp[1] = 0xFF;//³ö³§ÈÕÆÚ_ÔÂ
+			Tmp[2] = 0xFF;//³ö³§ÈÕÆÚ_ÈÕ
+			Tmp[3] = 0xFF;//Éè±¸±àºÅ¸ß°ËÎ»
+			Tmp[4] = 0xFF;//Éè±¸±àºÅµÍ°ËÎ»
+			Tmp[5] = 0xFF;//³ö³§±àºÅ¸ß°ËÎ»
+			Tmp[6] = 0xFF;//³ö³§±àºÅµÍ°ËÎ»
+			Tmp[7] = 0xFF;//³ö³§±àºÅ¸ß°ËÎ»
+			Tmp[8] = 0xFF;//³ö³§±àºÅµÍ°ËÎ»
+			FlashRsvWrite(Tmp, 9, infor_ChargeAddr, 0);//°ÑÖÕ¶ËÐÅÏ¢Ð´ÈëFLASH
 			delay_ms(10);
 			if(infoFLASH_read(0, infor_ChargeAddr) == 0xFF && infoFLASH_read(1, infor_ChargeAddr) == 0xFF\
 			&& infoFLASH_read(2, infor_ChargeAddr) == 0xFF && infoFLASH_read(3, infor_ChargeAddr) == 0xFF\
@@ -150,11 +149,11 @@ void main(void)
 			else
 				goto loop2;
 #endif
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½
+//¡¾³ö³§¸´Î»Òýµ¼²ÎÊý¡¿µ½´Ë½áÊø
 
 	OldVersion = infoFLASH_read(1,infor_BootAddr);
 
-	if(ResetVectorValid() == Enble_App)          // ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ø¹ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½
+	if(ResetVectorValid() == Enble_App)           // ÅÐ¶ÏÊÇ·ñÒÑ¾­ÏÂÔØ¹ýÓ¦ÓÃ³ÌÐò
 	{
 		for(i=0;i<10;i++)
 		{
@@ -163,7 +162,7 @@ void main(void)
 				break;
 		}
 		if(i < 10)
-			Application();                           // Ö´ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½
+			Application();                           // Ö´ÐÐÓ¦ÓÃ³ÌÐò
 		else
 		{
 			Tmp[0] = 0x01;				//force to update
@@ -185,7 +184,7 @@ void main(void)
 //			j=0;
 //	while(1)
 //	{
-//		if((UCA2IFG & UCRXIFG))//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½APÖ¸ï¿½î²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//		if((UCA2IFG & UCRXIFG))//ÒÔÏÂÊÇÓÃÓÚ½ÓÊÕAPÖ¸Áî²¢½âÎö´¦Àí
 //		{
 //			RxTemp = UCA2RXBUF;
 //			while(Read_StatReg()&0x01);
@@ -219,14 +218,14 @@ void main(void)
 
 /*******************************************************************************
 * Function Name  : Application
-* Description    : ï¿½ï¿½Cï¿½Ðµï¿½ï¿½Ã»ï¿½ï¿½Ö¸ï¿½ï¿½,Êµï¿½Öµï¿½Ö·×ªï¿½ï¿½
+* Description    : ÔÚCÖÐµ÷ÓÃ»ã±àÖ¸Áî,ÊµÏÖµØÖ·×ªÒÆ
 * Input para     : None
 * Output para    : None
 *******************************************************************************/
 void Application(void)
 {
 	uint16_t i = 0;
-	uint8_t Tmp[1];//flashï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½
+	uint8_t Tmp[1];//flash²Ù×÷ÖÐ¼ä±äÁ¿
 	uint8_t SendBytes[15] = {0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF};
 	uint8_t APP_Flag = 0;
 
@@ -234,49 +233,49 @@ void Application(void)
 	{
 		if(OldVersion == 0xFF)
 		{
-			if((UCA2IFG & UCRXIFG))//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½APÖ¸ï¿½î²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if((UCA2IFG & UCRXIFG))//ÒÔÏÂÊÇÓÃÓÚ½ÓÊÕAPÖ¸Áî²¢½âÎö´¦Àí
 			{
 				for(i = 0; i < 9; i++)
 				{
 					ReadPacket[i] = ReadPacket[i + 1];
 				}
-				ReadPacket[9] = UCA2RXBUF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				ReadPacket[9] = UCA2RXBUF;//»¬¶¯´®¿ÚÊý¾ÝÁ÷´°¿Ú
 
 				if(ReadPacket[0] == 0x0D && ReadPacket[9] == 0x0D)
 				{
-					if(ReadPacket[1] == 0xEF)//ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+					if(ReadPacket[1] == 0xEF)//¹Ì¼þÉý¼¶ÇëÇóÖ¸Áî
 					{
 						loop5:
 							delay_ms(10);
 							Tmp[0] = 0x01;
 							APP_Flag = 1;
-							FlashRsvWrite(Tmp, 1, infor_BootAddr, 0);//ï¿½ï¿½infor_BootAddrÐ´0x01ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+							FlashRsvWrite(Tmp, 1, infor_BootAddr, 0);//°Ñinfor_BootAddrÐ´0x01£¬½¨Á¢¹Ì¼þÉý¼¶±êÖ¾Î»
 							delay_ms(10);
 							if(infoFLASH_read(0, infor_BootAddr) == 0x01)
 								softReset();
 							else
 								goto loop5;
 					}
-					else if(ReadPacket[1] == 0xF0)//ï¿½Õ¶ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ñ¯Ö¸ï¿½ï¿½
+					else if(ReadPacket[1] == 0xF0)//ÖÕ¶ËÐÅÏ¢²éÑ¯Ö¸Áî
 					{
 						SendBytes[0] = 0xFF;
-						SendBytes[1] = infoFLASH_read(1, infor_BootAddr);//ï¿½Ì¼ï¿½ï¿½æ±¾ï¿½ï¿½
-						SendBytes[2] = infoFLASH_read(0, infor_ChargeAddr);//DevID_Hï¿½ï¿½ï¿½è±¸ï¿½ï¿½Å¸ï¿½Î»ï¿½ï¿½
-						SendBytes[3] = infoFLASH_read(1, infor_ChargeAddr);//DevID_Lï¿½ï¿½ï¿½è±¸ï¿½ï¿½Åµï¿½Î»ï¿½ï¿½
-						SendBytes[4] = infoFLASH_read(2, infor_ChargeAddr);//DevSN_Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Î»ï¿½ï¿½
-						SendBytes[5] = infoFLASH_read(3, infor_ChargeAddr);//DevSN_Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½Î»ï¿½ï¿½
-						SendBytes[6] = infoFLASH_read(4, infor_ChargeAddr);//PD_Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ê£©
-						SendBytes[7] = infoFLASH_read(5, infor_ChargeAddr);//PD_Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Â£ï¿½
-						SendBytes[8] = infoFLASH_read(6, infor_ChargeAddr);//PD_Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Õ£ï¿½
-						SendBytes[9] = infoFLASH_read(7, infor_ChargeAddr);//ï¿½Õ¶ï¿½ï¿½ï¿½ï¿½ï¿½
-						SendBytes[10] = infoFLASH_read(8, infor_ChargeAddr);//Í¨Ñ¶ï¿½ï¿½Ê½
+						SendBytes[1] = infoFLASH_read(1, infor_BootAddr);//¹Ì¼þ°æ±¾ºÅ
+						SendBytes[2] = infoFLASH_read(0, infor_ChargeAddr);//DevID_H£¨Éè±¸±àºÅ¸ßÎ»£©
+						SendBytes[3] = infoFLASH_read(1, infor_ChargeAddr);//DevID_L£¨Éè±¸±àºÅµÍÎ»£©
+						SendBytes[4] = infoFLASH_read(2, infor_ChargeAddr);//DevSN_H£¨³ö³§±àºÅ¸ßÎ»£©
+						SendBytes[5] = infoFLASH_read(3, infor_ChargeAddr);//DevSN_L£¨³ö³§±àºÅµÍÎ»£©
+						SendBytes[6] = infoFLASH_read(4, infor_ChargeAddr);//PD_H£¨³ö³§ÈÕÆÚ_Äê£©
+						SendBytes[7] = infoFLASH_read(5, infor_ChargeAddr);//PD_M£¨³ö³§ÈÕÆÚ_ÔÂ£©
+						SendBytes[8] = infoFLASH_read(6, infor_ChargeAddr);//PD_L£¨³ö³§ÈÕÆÚ_ÈÕ£©
+						SendBytes[9] = infoFLASH_read(7, infor_ChargeAddr);//ÖÕ¶ËÀàÐÍ
+						SendBytes[10] = infoFLASH_read(8, infor_ChargeAddr);//Í¨Ñ¶·½Ê½
 						SendBytes[11] = infoFLASH_read(9, infor_ChargeAddr);//Deveui_H
 						SendBytes[12] = infoFLASH_read(10, infor_ChargeAddr);//Deveui_L
-						SendBytes[13] = infoFLASH_read(11, infor_ChargeAddr);//ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
+						SendBytes[13] = infoFLASH_read(11, infor_ChargeAddr);//ÉÏ´«ÖÜÆÚ
 						SendBytes[14] = 0xFF;
 						SendNByteToUart2(SendBytes, 15);
 					}
-					else if(ReadPacket[1] == 0xFD)//ï¿½ï¿½Î»ï¿½Õ¶ï¿½
+					else if(ReadPacket[1] == 0xFD)//¸´Î»ÖÕ¶Ë
 					{
 						delay_ms(10);
 						delay_ms(10);
@@ -301,7 +300,7 @@ void Application(void)
 long textcount = 0;
 void Update(void)
 {
-	uint8_t Tmp[3];//flashï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½
+	uint8_t Tmp[3];//flash²Ù×÷ÖÐ¼ä±äÁ¿
 	uint16_t i = 0, j = 0, k = 0;
     uint8_t WriterBuf[16];
     uint8_t RecBuf[50];
@@ -314,89 +313,89 @@ void Update(void)
     unsigned char FlashWrite = 0;
     unsigned char UPDate_send_Flag = 0;
 
-   //5så»¶æ—¶
+   //´Ë´¦Ìí¼ÓÑÓÊ±5SÑÓÊ±
     for(k = 0; k < 500; k++)
     	delay_ms(10);
     delay_ms(100);
-    SendByteToUart2(0x75);//æ¸…é™¤txtlog
+    SendByteToUart2(0x75);//Çå³ýtxtlog
     delay_ms(100);
 
-    //ï¿½ï¿½ï¿½ï¿½WhileÑ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½APï¿½ï¿½ï¿½ï¿½
+    //ÒÔÏÂWhileÑ­»·ÊÇÓÃÓÚÓëAP½»»¥
     while(UPDate_Flag == 0)
     {
-		if(UPDate_send_Flag == 0)     //ï¿½Ë´ï¿½ï¿½ï¿½ifï¿½Ð¶ï¿½Ö»ï¿½ï¿½ï¿½Ú¶ï¿½È¡ï¿½è±¸ï¿½ï¿½Ç°ï¿½æ±¾ï¿½ï¿½
+		if(UPDate_send_Flag == 0)     //´Ë´¦µÄifÅÐ¶ÏÖ»ÓÃÓÚ¶ÁÈ¡Éè±¸µ±Ç°°æ±¾ºÅ
 		{
 			UPDate_send_Flag = 1;
 			OldVersion =  infoFLASH_read(1,infor_BootAddr);
 			delay_ms(10);
 		}
-		if((UCA2IFG & UCRXIFG))//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½APÖ¸ï¿½î²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if((UCA2IFG & UCRXIFG))//ÒÔÏÂÊÇÓÃÓÚ½ÓÊÕAPÖ¸Áî²¢½âÎö´¦Àí
 		{
 			for(i = 0; i < 9; i++)
 			{
 				ReadPacket[i] = ReadPacket[i + 1];
 			}
-			ReadPacket[9] = UCA2RXBUF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			ReadPacket[9] = UCA2RXBUF;//»¬¶¯´®¿ÚÊý¾ÝÁ÷´°¿Ú
 
 			if(ReadPacket[0] == 0x0D && ReadPacket[9] == 0x0D)
 			{
 				if(ReadPacket[1] == 0xEF)
 				{
-					NewVersion = ReadPacket[2];//ï¿½ï¿½È¡ï¿½Â°æ±¾
+					NewVersion = ReadPacket[2];//»ñÈ¡ÐÂ°æ±¾
 					if(NewVersion != OldVersion && NewVersion != 0xFF)
 					{
 						delay_ms(100);
-						SendByteToUart2(0x77);//2.ï¿½Ì¼ï¿½ï¿½æ±¾Ð£ï¿½ï¿½É¹ï¿½
+						SendByteToUart2(0x77);//2.¹Ì¼þ°æ±¾Ð£Ñé³É¹¦
 						delay_ms(100);
-						UPDate_Flag = 1;//ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½,×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						UPDate_Flag = 1;//ÖÃÎ»£¬ÍË³ö´óÑ­»·,×¼±¸Éý¼¶
 					}
 					else
 					{
 						loop2:
 							delay_ms(100);
 							Tmp[0] = 0xFF;
-							FlashRsvWrite(Tmp, 1, infor_BootAddr, 0);//ï¿½ï¿½infor_BootAddrÐ´0xFFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
+							FlashRsvWrite(Tmp, 1, infor_BootAddr, 0);//°Ñinfor_BootAddrÐ´0xFF£¬Çå³ý¹Ì¼þÉý¼¶±êÖ¾Î»
 							delay_ms(10);
 							if(infoFLASH_read(0, infor_BootAddr) == 0xFF)
 								delay_ms(100);
 							else
 								goto loop2;
 							delay_ms(100);
-							SendByteToUart2(0x76);   //[ERR03]ï¿½Ì¼ï¿½ï¿½æ±¾Ð£ï¿½ï¿½Î´Í¨ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½Îª0xFF
+							SendByteToUart2(0x76);   //[ERR03]¹Ì¼þ°æ±¾Ð£ÑéÎ´Í¨¹ý£º°æ±¾ºÅÏàÍ¬»òÎª0xFF
 							delay_ms(100);
 							delay_ms(100);
-							Application();              //ï¿½Ì¼ï¿½ï¿½æ±¾ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½
+							Application();              //¹Ì¼þ°æ±¾ÏàÍ¬£¬²»Éý¼¶£¬½øÈëÓ¦ÓÃ³ÌÐò
 					}
 				}
 			}
 		}
     }
-    //ï¿½ï¿½ï¿½ï¿½ï¿½Ç²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½Ê¼ï¿½ï¿½ï¿½Õ¹Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½
+    //ÒÔÏÂÊÇ²Á³ý´úÂëÇø²¢ÇÒ¿ªÊ¼½ÓÊÕ¹Ì¼þÊý¾Ý
     if(UPDate_Flag == 1)
     {
     	UPDate_Flag = 0;
     	delay_ms(100);
-    	SendByteToUart2(0x78);//3.ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½FLASH
+    	SendByteToUart2(0x78);//3.¿ªÊ¼²Á³ýFLASH
     	delay_ms(100);
-        /* ï¿½Ú´Ë´ï¿½ï¿½ï¿½ï¿½Ýºï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½flashï¿½Ä³ï¿½ï¿½ï¿½*/
-/*        for(i=0;i<29;i++)//ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½FLASHï¿½ï¿½ï¿½ï¿½
+       /* ÔÚ´Ë´¦¸ù¾ÝºÍÉÏÎ»»úÈí¼þÐ­ÒéÌí¼Ó²Á³ýflashµÄ³ÌÐò*/
+/*        for(i=0;i<29;i++)//²Á³ýÖ¸¶¨FLASHÇøÓò
         {
-        	FlashCtl_eraseSegment((uint8_t *)Start_Addr1);//ï¿½Þ¸ï¿½FLASHï¿½ï¿½Ö·
+        	FlashCtl_eraseSegment((uint8_t *)Start_Addr1);//ÐÞ¸ÄFLASHµØÖ·
         	delay_us(10);
         	Start_Addr1 += 0x200;
-        	if(Start_Addr1==0xFE00)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+        	if(Start_Addr1==0xFE00)//µ±²Áµ½×îºóÒ»¸öÉÈÇøÊ±
         	{
-        		Start_Addr1 = 0xC400;//ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½Í·
+        		Start_Addr1 = 0xC400;//½«Ö¸ÕëÒÆµ½¿ªÍ·
         	}
         }
         for(i=0;i<18;i++)
         {
-            FlashCtl_eraseSegment((uint8_t *)Start_Addr2);//ï¿½Þ¸ï¿½FLASHï¿½ï¿½Ö·
+            FlashCtl_eraseSegment((uint8_t *)Start_Addr2);//ÐÞ¸ÄFLASHµØÖ·
             delay_us(10);
             Start_Addr2 += 0x200;
-            if(Start_Addr2==0x12400)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+            if(Start_Addr2==0x12400)//µ±²Áµ½×îºóÒ»¸öÉÈÇøÊ±
             {
-                Start_Addr2 = 0x10000;//ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½Í·
+                Start_Addr2 = 0x10000;//½«Ö¸ÕëÒÆµ½¿ªÍ·
             }
         }
         FlashCtl_eraseBank((uint8_t *)BankBAddr);
@@ -405,7 +404,7 @@ void Update(void)
         delay_us(100);
         FlashCtl_eraseBank((uint8_t *)BankDAddr);
 */
-    	/************ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½SPIFlash********************/
+    	/*ÏÂÃæÒ»¶ÎÎª²Á³ýSPI Flash²Ù×÷*/
     	Power_3V_ON;
 		delay_ms(10);
 //		Print_Str("Erase start\r\n");
@@ -415,7 +414,7 @@ void Update(void)
 			Erase_Block(readAddr);
 			readAddr += 0x10000;
 			while(Read_StatReg()&0x01);
-					Read_Byte(0);	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½È¶ï¿½Ò»ï¿½ï¿½
+					Read_Byte(0);	//SPI Flash¶ÁÈ¡£¬ÐèÒª¶ÁÈ¡Ò»´Î£¬·ñÔò³öÒì³££¬Ô­Òò²»Ã÷
 		}
 		readAddr = 0;
 //		Erase_Chip();
@@ -426,15 +425,15 @@ void Update(void)
 
         delay_us(100);
     	delay_ms(100);
-        SendByteToUart2(0x79);//4.ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½FLASH
+        SendByteToUart2(0x79);//4.³É¹¦²Á³ýFLASH
         delay_ms(100);delay_ms(100);
-        SendByteToUart2(0x7A);//5.ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½
+        SendByteToUart2(0x7A);//5.¿ªÊ¼´«Êä¹Ì¼þ
         Write_Enable();
         i=0;
-        /*ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îºï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ÕºÍ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        /*ÏÂÃæÒ»¶Îº¯ÊýÎª´®¿ÚÊý¾Ý½ÓÊÕºÍ´¦Àí³ÌÐò */
         while(1)
         {
-        	if((UCA2IFG & UCRXIFG))//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½APÖ¸ï¿½î²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        	if((UCA2IFG & UCRXIFG))//ÒÔÏÂÊÇÓÃÓÚ½ÓÊÕAPÖ¸Áî²¢½âÎö´¦Àí
         	{
         		RxTemp = UCA2RXBUF;
 				while(Read_StatReg()&0x01);
@@ -463,28 +462,28 @@ void Update(void)
 //					SendNByteToUart2(a,ByteNum);
 //					while(1);
         		}
-        	}//end of if((UCA2IFG & UCRXIFG))//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½APÖ¸ï¿½î²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        	}//end of if((UCA2IFG & UCRXIFG))
         	if(FlashWrite ==1)
         	{
-        		/* ï¿½Ú´Ë´ï¿½ï¿½ï¿½ï¿½Ýºï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½flashï¿½Ä³ï¿½ï¿½ï¿½*/
-		        for(i=0;i<29;i++)//ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½FLASHï¿½ï¿½ï¿½ï¿½
+        		/* ÔÚ´Ë´¦¸ù¾ÝºÍÉÏÎ»»úÈí¼þÐ­ÒéÌí¼Ó²Á³ýflashµÄ³ÌÐò*/
+		        for(i=0;i<29;i++)//²Á³ýÖ¸¶¨FLASHÇøÓò
 				{
-					FlashCtl_eraseSegment((uint8_t *)Start_Addr1);//ï¿½Þ¸ï¿½FLASHï¿½ï¿½Ö·
+					FlashCtl_eraseSegment((uint8_t *)Start_Addr1);//ÐÞ¸ÄFLASHµØÖ·
 					delay_us(10);
 					Start_Addr1 += 0x200;
-					if(Start_Addr1==0xFE00)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+					if(Start_Addr1==0xFE00)//µ±²Áµ½×îºóÒ»¸öÉÈÇøÊ±
 					{
-						Start_Addr1 = 0xC400;//ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½Í·
+						Start_Addr1 = 0xC400;//½«Ö¸ÕëÒÆµ½¿ªÍ·
 					}
 				}
 				for(i=0;i<18;i++)
 				{
-					FlashCtl_eraseSegment((uint8_t *)Start_Addr2);//ï¿½Þ¸ï¿½FLASHï¿½ï¿½Ö·
+					FlashCtl_eraseSegment((uint8_t *)Start_Addr2);//ÐÞ¸ÄFLASHµØÖ·
 					delay_us(10);
 					Start_Addr2 += 0x200;
-					if(Start_Addr2==0x12400)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+					if(Start_Addr2==0x12400)//µ±²Áµ½×îºóÒ»¸öÉÈÇøÊ±
 					{
-						Start_Addr2 = 0x10000;//ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½Í·
+						Start_Addr2 = 0x10000;//½«Ö¸ÕëÒÆµ½¿ªÍ·
 					}
 				}
 				FlashCtl_eraseBank((uint8_t *)BankBAddr);
@@ -504,14 +503,14 @@ void Update(void)
 							{
 								loop3:
 									delay_ms(100);
-									Tmp[0] = 0xFF;//ï¿½ï¿½infor_BootAddrÐ´0xFFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
-									Tmp[1] = NewVersion;//infoFLASH_read(2, infor_BootAddr);//ï¿½ï¿½ï¿½ÂµÄ°æ±¾ï¿½ï¿½Ð´ï¿½ï¿½infor_BootAddr
+									Tmp[0] = 0xFF;//°Ñinfor_BootAddrÐ´0xFF£¬Çå³ý¹Ì¼þÉý¼¶±êÖ¾Î»
+									Tmp[1] = NewVersion;//infoFLASH_read(2, infor_BootAddr);//½«ÐÂµÄ°æ±¾ºÅÐ´Èëinfor_BootAddr
 									FlashRsvWrite(Tmp, 2, infor_BootAddr, 0);
 									delay_ms(100);
 									if(infoFLASH_read(0, infor_BootAddr) == 0xFF && infoFLASH_read(1, infor_BootAddr) == NewVersion)
 									{
 										delay_ms(100);
-										SendByteToUart2(0x7B);//6.ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+										SendByteToUart2(0x7B);//6.¹Ì¼þ´«ÊäÍê³É
 										delay_ms(100);
 										softReset();
 									}
@@ -522,10 +521,10 @@ void Update(void)
 						default:
 							break;
 					}
-					if(AddrFlag)//ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½Äµï¿½Ö·:[ï¿½ï¿½Ö·Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½]
+					if(AddrFlag)//½âÎö@ºóµÄµØÖ·:[µØÖ·Ò»ÐÐÓÃ×Ö·û·¢ËÍ]
 					{
 						RecBuf[RecCnt++] = RxTemp;
-						if(RxTemp == 0x0A)//Ê¶ï¿½ðµ½»ï¿½ï¿½ï¿½
+						if(RxTemp == 0x0A)//Ê¶±ðµ½»»ÐÐ
 						{
 							AddrFlag = 0;
 							RecCnt = 0;
@@ -538,7 +537,7 @@ void Update(void)
 							Addr += asciitohex(RxTemp);
 						}
 					}
-					else//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					else//½âÎöÊý¾Ý
 					{
 						if(RxTemp >= '0')
 						{
@@ -553,7 +552,7 @@ void Update(void)
 							if(j == 1)
 							{
 								j = 0;
-								//ï¿½æ´¢ï¿½ï¿½HEXï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ÎªÃ¿ï¿½ï¿½Byteï¿½æ´¢Ò»ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+								//´æ´¢£¬HEXÌõ¼þÏÂ£¬¸ÄÎªÃ¿¸öByte´æ´¢Ò»´Î£¬·ñÔò¹Ì¼þ³¤¶ÈÎªÆæÊý»á³ö´í
 								FlashCtl_write8(WriterBuf,(unsigned char *)Addr_Base,1);
 								Addr_Base += 1;
 							}
@@ -565,7 +564,7 @@ void Update(void)
     }
 }
 
-//ï¿½ï¿½ï¿½ï¿½: ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
+//ÃèÊö: ÖÐ¶ÏÏòÁ¿ÁÐ±í
 #pragma vector=PORT6_VECTOR
 __interrupt void PORT6_VECTOR_ISR(void)
 
